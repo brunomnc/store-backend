@@ -31,7 +31,28 @@ class UserController {
   }
 
   async update(req, res) {
-    return res.status(401);
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      age: Yup.number(),
+      email: Yup.string()
+        .email()
+        .required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(401).json({ error: 'Invalid email' });
+    }
+
+    const { name } = req.body;
+    const user = await User.findOne({ where: { email: req.body.email } });
+
+    if (!user) {
+      return res.status(401).json({ error: 'Email not found' });
+    }
+
+    user.name = name;
+
+    return res.send();
   }
 }
 
