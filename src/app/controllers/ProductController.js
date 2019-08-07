@@ -2,6 +2,18 @@ import * as Yup from 'yup';
 import Product from '../models/Product';
 
 class ProductController {
+  async index(req, res) {
+    const products = await Product.findAll({
+      attributes: ['id', 'code', 'price', 'description', 'name'],
+    });
+
+    if (!products) {
+      return res.status(401).json({ error: 'Product not found' });
+    }
+
+    return res.json(products);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       code: Yup.number().required(),
@@ -31,7 +43,7 @@ class ProductController {
   async update(req, res) {
     const schema = Yup.object().shape({
       code: Yup.number().required(),
-      name: Yup.str(),
+      name: Yup.string(),
       price: Yup.number(),
       description: Yup.string(),
     });
@@ -41,17 +53,16 @@ class ProductController {
     }
 
     const { name, price, description } = req.body;
+
     const product = await Product.findOne({ where: { code: req.body.code } });
 
     if (!product) {
       return res.status(401).json({ error: 'Product code not found ' });
     }
 
-    product.name = name;
-    product.price = price;
-    product.description = description;
+    await product.update({ name, price, description });
 
-    return res.send();
+    return res.json(product);
   }
 }
 
