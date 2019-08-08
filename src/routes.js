@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import cors from 'cors';
 
 import UserController from './app/controllers/UserController';
 import ProductController from './app/controllers/ProductController';
@@ -6,8 +7,6 @@ import SessionController from './app/controllers/SessionController';
 // import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
-
-const cors = require('cors');
 
 routes.use(cors({ origin: 'http://localhost:3000' }));
 
