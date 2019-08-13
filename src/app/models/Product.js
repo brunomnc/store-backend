@@ -8,6 +8,7 @@ class Product extends Model {
         name: Sequelize.STRING,
         price: Sequelize.NUMBER,
         description: Sequelize.STRING,
+        amount: Sequelize.INTEGER,
       },
       {
         sequelize,

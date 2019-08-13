@@ -3,6 +3,18 @@ import Product from '../models/Product';
 
 class ProductController {
   async index(req, res) {
+    if (req.params.id) {
+      const product = await Product.findOne({
+        where: { id: req.params.id },
+        attributes: ['id', 'code', 'price', 'description', 'name'],
+      });
+
+      if (!product) {
+        return res.status(401).json({ error: 'Product not found' });
+      }
+
+      return res.json(product);
+    }
     const products = await Product.findAll({
       attributes: ['id', 'code', 'price', 'description', 'name'],
     });
@@ -10,7 +22,6 @@ class ProductController {
     if (!products) {
       return res.status(401).json({ error: 'Product not found' });
     }
-
     return res.json(products);
   }
 
