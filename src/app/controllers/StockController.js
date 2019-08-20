@@ -40,7 +40,7 @@ class ProductController {
       return res.status(401).json({ error: 'Invalid data' });
     }
 
-    const { id, add, value } = req.body;
+    const { add, value } = req.body;
 
     const product = await Product.findOne({ where: { id: req.body.id } });
 
